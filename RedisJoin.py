@@ -3,6 +3,8 @@ import json, redis, time
 neighborhoods = []
 crushes = []
 
+file = open('ResultsRedis.geojson', 'w')
+
 r = redis.StrictRedis(host='localhost', port='6379', db=0)
 r.flushall()
 
@@ -37,7 +39,7 @@ for i in neighborhoods:
     for j in crushes:
         if (min(r.hkeys(i)) <= min(r.hkeys(j)) <= max(r.hkeys(i))):
             if (min(r.hvals(i)) <= min(r.hvals(j)) <= max(r.hvals(i))):
-                #r.hset('results', r.hkeys(j), r.hvals(j))
+                r.hset('results', r.hkeys(j), r.hvals(j))
                 count = count + 1
                 #print(count)
 

@@ -3,7 +3,7 @@ import time, os
 conn = psycopg2.connect(database='postgis_22_DBSpatial', user='postgres', password='salilbatra', host='127.0.0.1', port='5432')
 #print("opened database very very successfully")
 
-
+file = open('resultPostgis.geojson', 'w')
 cur = conn.cursor()
 start = time.time()
 #print(datetime.time)
@@ -26,5 +26,5 @@ cur.execute("""SELECT ng.name, cs.latitude, cs.longitude
 end = time.time()-start
 
 for row in cur.fetchall():
-    print(row)
+    file.write(str(row))
 print(end)

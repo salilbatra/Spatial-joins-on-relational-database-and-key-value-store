@@ -3,8 +3,8 @@ import json, time, sys
 
 m = pymongo.MongoClient('localhost', 27017)
 db = m.test
-file = open('resultintersect.geojson', 'w')
-file2 = open('resultwithin.geojson', 'w')
+file = open('resultintersectMongoDB.geojson', 'w')
+file2 = open('resultwithinMongoDB.geojson', 'w')
 
 
 neighborhoods = []
@@ -37,6 +37,9 @@ for row2 in test_data1['features']:
 enddata = time.time() - startdata
 print('/n', enddata)
 
+db.neighborhoods.ensure_index([('coordinates', pymongo.GEO2D)])
+db.crushes.ensure_index([('coordinates', pymongo.GEO2D)])
+#print('ensured index')
 count = 0
 startintersect = time.time()
 print(startintersect)
@@ -47,8 +50,8 @@ for n in neighborhoods[1]:
                       {'$geometry':{'type': 'Polygon',
                                      'coordinates': n}
                        }}}):
-         #file.write(d1)
-            count = count + 1
+            file.write(str(d1))
+            #count = count + 1
             #print(count, d1)
 
 endintersect = time.time() - startintersect
@@ -64,8 +67,8 @@ for n in neighborhoods[1]:
                       {'$geometry':{'type': 'Polygon',
                                      'coordinates': n}
                        }}}):
-         #file2.write(d1)
-            countWithin = countWithin + 1
+            file2.write(str(d1))
+            #countWithin = countWithin + 1
             #print(countWithin, d1)
 
 endWithin = time.time() - startWithin
